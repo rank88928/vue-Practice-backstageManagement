@@ -1,0 +1,10 @@
+/*按鈕類*/
+.el-button--large {
+  font-size: 24px !important;
+  padding: 15px 15px !important;
+}
+.btn-box {
+  display: flex;
+  padding: 16px;
+  justify-content: space-between;
+}
