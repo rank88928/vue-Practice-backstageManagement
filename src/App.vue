@@ -1,24 +1,20 @@
 <template>
-  <n-message-provider>
-    <n-dialog-provider>
-      <div id="root">
-        <Loading v-if="loading.isloading" />
-        <Sidebar />
-        <PageContainer />
-        <Dialog :dialog="dialog_config" />
-      </div>
-    </n-dialog-provider>
-  </n-message-provider>
+  <div id="root">
+    <Loading v-if="loading.isloading" />
+    <Dialog :dialog="dialog_config" />
+    <div class="container">
+      <RouterView></RouterView>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue';
-// import * as firebase from '../public/firebase_init';
-import Sidebar from '@/components/Sidebar.vue';
-import PageContainer from '@/components/PageContainer.vue';
+import { RouterLink, RouterView } from 'vue-router';
 import Dialog from '@/components/Dialog.vue';
 import Loading from '@/components/Loading.vue';
 import emitter from '@/utils/emitter';
+import { ElMessage } from 'element-plus';
 
 let loading = reactive({
   isloading: false,
@@ -65,7 +61,13 @@ emitter.on('loading', (promise) => {
 #root {
   display: flex;
   width: 100%;
-  height: 100%;
   min-width: 1200px;
+  max-height: 100vh;
+  height: 100vh;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
 }
 </style>
