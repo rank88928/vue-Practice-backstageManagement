@@ -1,11 +1,14 @@
-// Import the functions you need from the SDKs you need
-
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js';
 //firebase核心
-// import { getAnalytics } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js';
+import { initializeApp } from 'firebase/app';
+
 //用戶行為追蹤
-import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js';
+// import { getAnalytics } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js';
+
 //資料庫配置
+import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from 'firebase/firestore';
+
+//帳號驗證
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, fetchSignInMethodsForEmail } from 'firebase/auth';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -25,8 +28,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 const firestore_db = getFirestore(app);
+const auth = getAuth(app);
 
-//導出資料庫相關api
+//資料庫api
 const firestore_api = {
   db: firestore_db,
   getFirestore, // 獲取Firestore實例
@@ -39,4 +43,4 @@ const firestore_api = {
   getDocs, //獲取全部文檔資料
 };
 
-export { firebaseConfig, firestore_api };
+export { firebaseConfig, firestore_api, auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, fetchSignInMethodsForEmail };
