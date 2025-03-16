@@ -25,13 +25,14 @@ function handleConfirm() {
   });
 
   Promise.resolve()
-    .then(() => props.dialog.handleConfirm()) // 保證同步函數也能進入 Promise 流程
+    .then(() => props.dialog.handleConfirm()) // 保證同步函數也能進入 Promise流程
     .then(() => {
       setTimeout(() => {
         alert('操作成功');
       }, 1000);
     })
-    .catch(() => {
+    .catch((error) => {
+      console.log(error);
       setTimeout(() => {
         alert('操作失敗');
       }, 1000);

@@ -2,24 +2,28 @@
   <div class="mask">
     <div class="product-form">
       <div class="img-box">
-        <UploadImg :img="product_data.img" @update="user_update_img" />
+        <UploadImg :img="revise_obj.img" @update="user_update_img" />
       </div>
 
       <div class="form-box">
-        <el-form ref="form" :model="product_data" :rules="rules">
+        <el-form ref="form" :model="revise_obj" :rules="rules">
           <div class="input-box">
+            <el-form-item label="識別id" prop="id">
+              <el-input v-model="revise_obj.key" disabled />
+            </el-form-item>
+
             <el-form-item label="商品名稱" prop="name">
-              <el-input v-model="product_data.name" />
+              <el-input v-model="revise_obj.name" />
             </el-form-item>
 
             <el-form-item label="產品類別" prop="type">
-              <el-select v-model="product_data.type" :placeholder="product_data.type" size="large">
+              <el-select v-model="revise_obj.type" :placeholder="revise_obj.type" size="large">
                 <el-option v-for="item in product_type" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
 
             <el-form-item label="單價" prop="price">
-              <el-input-number v-model="product_data.price" :min="0" :max="1000" controls-position="right">
+              <el-input-number v-model="revise_obj.price" :min="0" :max="1000" controls-position="right">
                 <template #suffix>
                   <span>元</span>
                 </template>
@@ -27,7 +31,7 @@
             </el-form-item>
 
             <el-form-item label="庫存數量" prop="stock">
-              <el-input-number v-model="product_data.stock" :min="0" :max="1000" controls-position="right">
+              <el-input-number v-model="revise_obj.stock" :min="0" :max="1000" controls-position="right">
                 <template #suffix>
                   <span>個</span>
                 </template>
@@ -35,16 +39,14 @@
             </el-form-item>
 
             <el-form-item label="商品描述" prop="product_text" id="text">
-              <el-input v-model="product_data.product_text" type="textarea" :style="{ height: '100%' }" />
+              <el-input v-model="revise_obj.product_text" type="textarea" :style="{ height: '100%' }" />
             </el-form-item>
           </div>
         </el-form>
         <div class="btn-box">
-          <el-button type="success" @click.prevent="click_push">確定修改</el-button>
+          <el-button type="success" @click.prevent="click_revise(revise_obj)">確定修改</el-button>
           <el-button type="danger" @click.prevent="$emit('cancel')">取消</el-button>
         </div>
-        <!-- <button class="btn" title="上傳至firebase" @click.prevent="click_push">上傳新商品</button> -->
-        <!-- <button class="btn" @click.prevent="$emit('cancel')">取消</button> -->
       </div>
     </div>
   </div>
@@ -53,12 +55,16 @@
 <script setup>
 import { ref, reactive, defineEmits } from 'vue';
 import emitter from '@/utils/emitter';
-import * as db_api from '@/api/firebase_db_api';
-import UploadImg from './UploadImg.vue';
+import { product_api as product_serve } from '@/api/firebase_db_api';
+import UploadImg from '@/components/UploadImg.vue';
+import { useProductStore } from '@/store/product';
 
+let props = defineProps(['item']);
+let revise_obj = reactive(JSON.parse(JSON.stringify(props.item))); //副本
 let emit = defineEmits(['cancel']);
-
-//類別生成
+let product_api = product_serve();
+let product_store = useProductStore();
+//表單類別
 let product_type = [
   {
     value: '主菜',
@@ -73,16 +79,6 @@ let product_type = [
     label: '甜點',
   },
 ];
-
-let product_data = reactive({
-  name: '1',
-  type: product_type[0].value,
-  price: 1,
-  stock: 1,
-  product_text: '1',
-  img: '',
-  isListed: false, //預設不上架
-});
 
 //驗證
 const rules = reactive({
@@ -120,21 +116,56 @@ const rules = reactive({
 });
 
 function user_update_img(e) {
-  product_data.img = e;
+  revise_obj.img = e;
 }
 
-//上傳
-function click_push() {
-  function push_data() {
-    emit('cancel');
-    return db_api.add_product_to_database(product_data); //上傳
+//資料修改
+function click_revise(obj) {
+  async function revise_data() {
+    let revise_data = find_differences(obj, props.item);
+    emit('cancel'); //關閉對話框
+
+    await product_api.update_product(props.item.key, revise_data);
+    await product_store.get_new_data();
   }
 
-  //呼叫對話框
   emitter.emit('open-dialog', {
     mes: '確定上傳?',
-    handleConfirm: push_data,
+    handleConfirm: revise_data,
   });
+}
+
+//修改資料差異
+function find_differences(new_Data, old_data) {
+  let raw_new_data = JSON.parse(JSON.stringify(new_Data));
+  let raw_old_data = JSON.parse(JSON.stringify(old_data));
+  let differences = {}; //暫存
+
+  // 遍歷屬性比對
+  for (let key in raw_new_data) {
+    if (raw_new_data.hasOwnProperty(key)) {
+      // 只比較自有屬性 原型鍊上的略過
+      if (raw_new_data[key] !== raw_old_data[key]) {
+        //新舊不一時紀錄下來
+        differences[key] = {
+          newValue: raw_new_data[key], // 新值
+          oldValue: raw_old_data[key], // 舊值
+        };
+      }
+    }
+  }
+
+  function get_updated() {
+    let differences_data = {};
+    for (let key in differences) {
+      if (differences.hasOwnProperty(key)) {
+        differences_data[key] = differences[key].newValue;
+      }
+    }
+    return differences_data;
+  }
+
+  return get_updated();
 }
 </script>
 
@@ -205,9 +236,5 @@ form {
 
 .el-textarea {
   flex-grow: 1 !important;
-}
-::v-deep(.el-textarea__inner) {
-  resize: none;
-  height: 100%;
 }
 </style>
