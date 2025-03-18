@@ -52,7 +52,6 @@ const router = createRouter({
 //全局前置守衛
 router.beforeEach(async (to, from, next) => {
   let user_state = useUserStore();
-
   let verify = await user_state.verify_uid();
 
   if (verify) {

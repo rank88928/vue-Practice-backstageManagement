@@ -60,6 +60,18 @@ async function add_data(path, data, show = true) {
     throw error;
   }
 }
+//新增'自定義名'
+async function add_customId_data(path, data, id, show = true) {
+  try {
+    let dbRef = api.doc(db, path, id); //配給唯一欄位key名稱
+
+    await api.setDoc(dbRef, data);
+    if (show) ElMessage.success('新增成功');
+  } catch (error) {
+    if (show) ElMessage.success('新增失敗');
+    throw error;
+  }
+}
 
 async function delete_data(path, docid) {
   try {
@@ -98,4 +110,4 @@ async function get_total_count(path) {
   }
 }
 
-export { get_all_data, get_single_data, get_total_count, add_data, delete_data, update_data };
+export { get_all_data, get_single_data, get_total_count, add_data, add_customId_data, delete_data, update_data };

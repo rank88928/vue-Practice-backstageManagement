@@ -63,10 +63,10 @@ import Background from '@/components/background/index.vue';
 import { Lock } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@/api/firebase_config';
-import { user_api as user_serve } from '@/api/firebase_db_api';
+import { user_api } from '@/api/firebase_user_api';
 import { useUserStore } from '@/store/user';
 import { useRouter } from 'vue-router';
-let user_api = user_serve();
+
 let switch_box = ref(); //切換登入註冊狀態
 let router = useRouter();
 //用戶資料
@@ -163,7 +163,7 @@ function login_user() {
       }, 500);
     } catch (error) {
       ElMessage.error('登入失敗! 請確認帳號或密碼是否正確');
-      console.log(error);
+      console.error(error);
     }
   }
 

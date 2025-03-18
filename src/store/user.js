@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia';
 
-import { user_api as user_serve } from '@/api/firebase_db_api';
+import { user_api } from '@/api/firebase_user_api';
 import { auth, signInWithEmailAndPassword } from '@/api/firebase_config';
-let user_api = user_serve();
 
 export let useUserStore = defineStore('user', {
   state: () => ({
@@ -20,8 +19,8 @@ export let useUserStore = defineStore('user', {
       try {
         //firebase auth
         let auth_user = await signInWithEmailAndPassword(auth, email, password);
-        this.set_uid(auth_user.user.uid); //更新uid
-        await user_api.latest_login_time(auth_user.user.uid); //修改登入時間
+        this.set_uid(auth_user.user.uid);
+        await user_api.latest_login_time(auth_user.user.uid);
         await this.get_user_data();
       } catch (error) {
         throw error;

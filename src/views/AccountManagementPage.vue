@@ -52,10 +52,9 @@
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue';
 import DataPanel from '@/components/DataPanel.vue';
-import { user_api as user_serve } from '@/api/firebase_db_api.js';
+import { user_api } from '@/api/firebase_user_api';
 import { get_zh_TW_map, delay_time } from '@/utils/utils.js';
 
-let user_api = user_serve();
 let user_data = reactive([]);
 let is_loading_skeleton = ref(true);
 let plate_config = reactive({
@@ -94,8 +93,7 @@ function filter_role(value, row) {
   return row.role === value;
 }
 
-//資料渲染
-async function display_data() {
+async function get_data() {
   try {
     let new_data = await user_api.get_all_user_data();
     //權限格式轉為數組供表單使用
@@ -118,7 +116,7 @@ async function display_data() {
 }
 
 onMounted(async () => {
-  display_data();
+  get_data();
 });
 </script>
 
