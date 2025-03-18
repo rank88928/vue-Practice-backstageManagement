@@ -1,19 +1,12 @@
 //firebase核心
 import { initializeApp } from 'firebase/app';
 
-//用戶行為追蹤
-// import { getAnalytics } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js';
+//資料庫功能
+import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, arrayUnion } from 'firebase/firestore';
 
-//資料庫配置
-import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from 'firebase/firestore';
-
-//帳號驗證
+//帳號驗證功能
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, fetchSignInMethodsForEmail } from 'firebase/auth';
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: 'AIzaSyAaBJ4mgFMfiK-b4M84tbEIzK62vjHNOjY',
   authDomain: 'test-1-e3a96.firebaseapp.com', //用戶登入驗證
@@ -26,7 +19,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 const firestore_db = getFirestore(app);
 const auth = getAuth(app);
 
@@ -41,6 +33,7 @@ const firestore_api = {
   deleteDoc, // 刪除文檔資料
   collection, //查詢集合(整個資料夾 沒有數據)
   getDocs, //獲取全部文檔資料
+  arrayUnion, //推送數組格式
 };
 
 export { firebaseConfig, firestore_api, auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, fetchSignInMethodsForEmail };

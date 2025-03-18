@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
-import { product_api as product_serve } from '@/api/firebase_db_api';
-
-let product_api = product_serve();
+import { product_api } from '@/api/firebase_product_api';
 
 export let useProductStore = defineStore('product', {
   state: () => ({
@@ -14,9 +12,9 @@ export let useProductStore = defineStore('product', {
 
   actions: {
     get_new_data: async function () {
+      let new_data = await product_api.get_all_data();
       this.data.all.length = 0;
-      let new_data = await product_api.get_all_product_data();
-      this.data.all.splice(0, this.data.length, ...new_data);
+      this.data.all.splice(0, 0, ...new_data);
       this.data_filter();
     },
 

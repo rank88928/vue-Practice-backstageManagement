@@ -52,11 +52,10 @@
 import { ref, reactive, defineEmits, toRaw } from 'vue';
 import emitter from '@/utils/emitter';
 import UploadImg from '@/components/UploadImg.vue';
-import { product_api as product_serve } from '../../api/firebase_db_api';
+import { product_api } from '@/api/firebase_product_api';
 import { useProductStore } from '@/store/product';
 import { preset_images } from '@/utils/img_base64';
 let emit = defineEmits(['cancel']);
-let product_api = product_serve();
 let product_store = useProductStore();
 //類別
 let product_type = [
@@ -130,7 +129,7 @@ function click_push() {
     let raw_product = toRaw(product_data); //轉為一般對象
     emit('cancel');
 
-    await product_api.add_product(raw_product); //上傳
+    await product_api.add_product(raw_product);
     await product_store.get_new_data();
   }
 

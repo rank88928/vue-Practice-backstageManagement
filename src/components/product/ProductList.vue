@@ -53,14 +53,13 @@
 <script setup>
 import { ref, computed } from 'vue';
 import ReviseProduct from './ReviseProduct.vue';
-import { product_api as product_serve } from '@/api/firebase_db_api';
+import { product_api } from '@/api/firebase_product_api';
 import emitter from '@/utils/emitter';
 import { useProductStore } from '@/store/product';
 
 let product_store = useProductStore();
 let revise_module_show = ref(false);
 let props = defineProps(['item']);
-let product_api = product_serve();
 
 //刪除商品
 function delete_product() {

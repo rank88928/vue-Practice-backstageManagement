@@ -44,16 +44,17 @@ import { ref, reactive, watch, onMounted, nextTick } from 'vue';
 import DataPanel from '@/components/DataPanel.vue';
 import AddProduct from '@/components/product/AddProduct.vue';
 import ProductList from '@/components/product/ProductList.vue';
-import LazyLoading from '../components/LazyLoading.vue';
+import LazyLoading from '@/components/LazyLoading.vue';
 import { useProductStore } from '@/store/product';
 import { delay_time } from '@/utils/utils.js';
 import ProductTable from '@/components/product/ProductTable.vue';
 let product_store = useProductStore();
-let category = ref('all'); //預設顯示全部
+let category = ref('all'); //預設顯示全部種類
 let add_modal_show = ref(false);
 let lazy_loading_data = reactive([]);
 let is_loading_skeleton = ref(true);
 let is_show_table = ref(false);
+
 let plate_config = reactive({
   item: [
     {
@@ -228,7 +229,7 @@ onMounted(async () => {
   justify-content: center;
   flex-wrap: wrap;
 }
-::v-deep .el-table__empty-text {
-  width: 80%;
+::v-deep .el-collapse-item__header.is-active {
+  color: #e20f0f;
 }
 </style>

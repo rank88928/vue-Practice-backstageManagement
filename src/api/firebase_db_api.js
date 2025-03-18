@@ -2,8 +2,6 @@ import * as firebase from './firebase_config';
 import { serverTimestamp } from 'firebase/firestore';
 import { ElMessage } from 'element-plus';
 import { convert_firebase_timestamp_to_UTC8, delay_time } from '@/utils/utils.js';
-import { error } from 'naive-ui/es/_utils/naive/warn';
-import { ar } from 'element-plus/es/locales.mjs';
 
 let api = firebase.firestore_api; //官方api接口
 let db = firebase.firestore_api.db; //指定資料庫
@@ -92,87 +90,6 @@ async function update_data(path, docid, data, show = true) {
     throw error;
   }
 }
-
-//通用邏輯
-
-// 拿特定資料庫當前總資料數
-async function get_total_count(path) {
-  try {
-    let data = await get_all_data(path);
-
-    return data.length;
-  } catch (error) {
-    console.log('查詢總筆數錯誤' + error);
-  }
-}
-
-//業務邏輯
-let product_api = () => {
-  let path = 'product';
-
-  return {
-    get_all_product_data: async () => {
-      try {
-        return await get_all_data(path);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    //到時候改掉
-    //查詢全部商品資料總筆數
-    get_all_products_count: async function () {
-      try {
-        let data = await this.get_all_product_data();
-        return data.length;
-      } catch (error) {}
-    },
-
-    //新增商品項
-    add_product: async function (data) {
-      try {
-        let id = await this.get_all_products_count();
-        data.id = id + 1;
-
-        await add_data(path, data);
-      } catch (error) {
-        throw error;
-      }
-    },
-
-    //修改指定商品資料
-    update_product: async (docid, data) => {
-      try {
-        await update_data(path, docid, data);
-      } catch (error) {
-        throw error;
-      }
-    },
-
-    //刪除指定商品項
-    delete_product: async (docid) => {
-      try {
-        await delete_data(path, docid);
-      } catch (error) {
-        throw error;
-      }
-    },
-
-    //根據索引返回完整商品資料
-    get_selected_product_data: async function (arr) {
-      let data = await this.get_all_product_data();
-      let hash = new Set(arr);
-
-      let selected_data = data.filter((item) => hash.has(item.key));
-
-      //總數不相符時拋錯
-      if (selected_data.length !== arr.length) {
-        throw new Error('部分商品資料未找到，請確認id是否正確');
-      }
-
-      return selected_data;
-    },
-  };
-};
 
 let user_api = () => {
   let path = 'user_data';
@@ -496,4 +413,4 @@ let order_api = () => {
   };
 };
 
-export { product_api, user_api, order_api };
+export { user_api, order_api };
