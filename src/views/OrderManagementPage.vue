@@ -29,7 +29,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table sortable prop="basic.order_id" label="訂單序號" />
+      <el-table-column sortable prop="basic.order_id" label="訂單序號" />
       <el-table-column sortable prop="basic.builder" label="建立者" />
       <el-table-column sortable prop="basic.build_time" label="建立時間" />
       <el-table-column sortable prop="order_details.schedule.status" label="訂單狀態" :filters="state_filters_options" :filter-method="filter_state">
@@ -53,12 +53,11 @@
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue';
 import DataPanel from '@/components/DataPanel.vue';
-import { order_api as order_serve } from '@/api/firebase_db_api.js';
+import { order_api } from '@/api/firebase_order_api.js';
 import { get_zh_TW_map, delay_time } from '@/utils/utils.js';
 import StepBar from '@/components/StepBar.vue';
 import { useUserStore } from '@/store/user.js';
 
-let order_api = order_serve();
 let order_data = reactive([]);
 let user_state = useUserStore();
 let is_loading_skeleton = ref(true);
@@ -175,7 +174,7 @@ function processed_state_data(time_line) {
 }
 
 //資料渲染
-async function display_data() {
+async function get_data() {
   try {
     let new_data = await order_api.get_all_order_data();
     await delay_time(500);
@@ -188,7 +187,7 @@ async function display_data() {
 }
 
 onMounted(async () => {
-  display_data();
+  get_data();
 });
 
 function random_add_order() {
