@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-
 import { user_api } from '@/api/firebase_user_api';
 import { auth, signInWithEmailAndPassword } from '@/api/firebase_config';
 
@@ -40,8 +39,16 @@ export let useUserStore = defineStore('user', {
     },
 
     //合法uid驗證
-    verify_uid() {
-      return user_api.verify_uid(this.uid);
+    verify_uid: async function () {
+      let user_data = await user_api.verify_uid(this.uid);
+
+      if (user_data) {
+        this.data.email = user_data.email;
+        this.data.role = user_data.role;
+        return true;
+      } else {
+        return false;
+      }
     },
 
     //取得用戶資料

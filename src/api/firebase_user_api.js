@@ -101,7 +101,7 @@ let user_api = {
   //uid是否存在紀錄
   verify_uid: async (uid) => {
     let data = await get_all_data(path);
-    return data.some((item) => {
+    return data.find((item) => {
       return item.key === String(uid);
     });
   },
