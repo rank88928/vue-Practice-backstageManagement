@@ -10,8 +10,8 @@
       <el-button @click="add_config">新增</el-button>
 
       <template class="panel">
-        <div class="demo-collapse" v-for="(star, index) in star_resource_pool" :key="index">
-          <el-collapse v-model="activeName" accordion @mousedown.stop @click.stop>
+        <div class="demo-collapse">
+          <el-collapse v-for="(star, index) in star_resource_pool" :key="index" v-model="activeName" accordion @mousedown.stop @click.stop>
             <el-collapse-item :title="`配置項 ${index + 1}`" :name="String(index + 1)">
               <div class="slider-demo-block">
                 <span class="demonstration">生成數</span>
@@ -114,8 +114,7 @@ onMounted(() => {
 });
 </script>
 
-<style>
-/* 配置面板 */
+<style scoped>
 .panel {
   display: block;
 }
@@ -133,6 +132,10 @@ onMounted(() => {
 .delete-btn {
   margin-right: 0;
   margin-left: auto;
+}
+
+::v-deep .el-collapse-item__header {
+  border-radius: 0;
 }
 
 /* 齒輪 */
@@ -156,20 +159,6 @@ onMounted(() => {
   transform: rotate(-45deg);
 }
 
-.meteor {
-  position: absolute;
-  left: 0;
-  height: 2px; /*線條粗細*/
-  color: #2afaf2;
-  background: linear-gradient(45deg, currentColor, transparent); /*尾焰*/
-  border-radius: 50%;
-  filter: drop-shadow(0 0 6px currentColor);
-  transform: translate3d(104em, 0, 0);
-  animation:
-    fall var(--fall-duration) var(--fall-delay) linear 2,
-    tail-fade var(--fall-duration) var(--fall-delay) ease-out 2;
-}
-
 .stars .meteor:nth-child(even) {
   color: #8bb4b3;
 }
@@ -190,6 +179,22 @@ onMounted(() => {
 }
 .meteor::after {
   transform: rotate(-45deg);
+}
+</style>
+
+<style>
+.meteor {
+  position: absolute !important;
+  left: 0;
+  height: 2px; /*線條粗細*/
+  color: #2afaf2;
+  background: linear-gradient(45deg, currentColor, transparent); /*尾焰*/
+  border-radius: 50%;
+  filter: drop-shadow(0 0 6px currentColor);
+  transform: translate3d(104em, 0, 0);
+  animation:
+    fall var(--fall-duration) var(--fall-delay) linear 2,
+    tail-fade var(--fall-duration) var(--fall-delay) ease-out 2;
 }
 
 @keyframes fall {
