@@ -53,8 +53,8 @@
 import { ref, reactive, onMounted, watch } from 'vue';
 import DataPanel from '@/components/DataPanel.vue';
 import { user_api } from '@/api/firebase_user_api';
-import { get_zh_TW_map, delay_time } from '@/utils/utils.js';
-
+import { delay_time } from '@/utils/utils.js';
+import { get_zh_TW_map } from '@/utils/dictionary.js';
 let user_data = reactive([]);
 let is_loading_skeleton = ref(true);
 let plate_config = reactive({

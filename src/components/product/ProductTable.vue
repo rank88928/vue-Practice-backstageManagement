@@ -26,7 +26,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { get_zh_TW_map } from '@/utils/utils.js';
+import { get_zh_TW_map } from '@/utils/dictionary.js';
 let props = defineProps(['data']);
 //表單插槽好像會自動替換掉 暫時留存測試
 let is_loading_skeleton = ref(true);

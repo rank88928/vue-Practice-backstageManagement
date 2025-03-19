@@ -21,7 +21,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useUserStore } from '../store/user';
-import { get_zh_TW_map } from '@/utils/utils.js';
+import { get_zh_TW_map } from '@/utils/dictionary.js';
 
 let user = useUserStore();
 let time = ref(new Date().toLocaleString());
