@@ -1,6 +1,32 @@
 import { get_all_data, get_total_count, add_data, delete_data, update_data } from '@/api/firebase_api';
-
+import { ElMessage } from 'element-plus';
 const path = 'product';
+
+function id_prohibited_update(id) {
+  let id_arr = [
+    '27GlDBYCAKKMe99mpwJG',
+    '5qo76klVthzNtGfOIAAp',
+    'FyY8sUOozIlDvUAuXhoS',
+    'GShgcCSYOvBbnZyoMzSB',
+    'NPc5bRGnDeLkZmpVv6jp',
+    'NRHZay7UHOj8ARKyDIkl',
+    'PObxVgzKSH82YckfL3gf',
+    'RUwgo80oJ5r4OsdyXdh9',
+    'WmcG8Lsnyb6Llxa9FUfX',
+    'alBSHO2NgZkGMgiATzuL',
+    'bgOBIZTW473Gg7PEuHiD',
+    'qN4Q3R79JLAl4hzeqPAS',
+    'yPZ6Nig12l8Cdu6REoY1',
+    'yz1hRVJ9ea0fcP3ajBsQ',
+    'yuabuZMsvJF2F0rbtCBo',
+  ];
+  if (id_arr.includes(id)) {
+    ElMessage.error('該商品為限制項 您沒有權限修改 請使用自訂項目測試');
+    return true;
+  } else {
+    return false;
+  }
+}
 
 let product_api = {
   get_all_data: async () => {
@@ -33,6 +59,9 @@ let product_api = {
 
   //修改指定商品資料
   update_product: async (docid, data) => {
+    if (id_prohibited_update(docid)) {
+      return;
+    }
     try {
       await update_data(path, docid, data);
       update_ui();
@@ -43,6 +72,9 @@ let product_api = {
 
   //刪除指定商品項
   delete_product: async (docid) => {
+    if (id_prohibited_update(docid)) {
+      return;
+    }
     try {
       await delete_data(path, docid);
       update_ui();
