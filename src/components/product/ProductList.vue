@@ -56,7 +56,7 @@ import ReviseProduct from './ReviseProduct.vue';
 import { product_api } from '@/api/firebase_product_api';
 import emitter from '@/utils/emitter';
 import { useProductStore } from '@/store/product';
-
+import { ElMessage } from 'element-plus';
 let product_store = useProductStore();
 let revise_module_show = ref(false);
 let props = defineProps(['item']);
@@ -99,6 +99,15 @@ function revise_isListed(action) {
   } else {
     alert('當前狀態相同');
   }
+}
+
+//修改前判斷狀態
+function check_status_before_revise(isListed) {
+  if (isListed === true) {
+    ElMessage.error('商品必須為下架狀態才能修改! 請先下架');
+    return;
+  }
+  revise_module_show.value = true;
 }
 
 //全轉換成字串 el-input只接受字串格式 圖片不用
