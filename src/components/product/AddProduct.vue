@@ -50,11 +50,12 @@
 
 <script setup>
 import { ref, reactive, defineEmits, toRaw } from 'vue';
-import emitter from '@/utils/emitter';
 import UploadImg from '@/components/UploadImg.vue';
 import { product_api } from '@/api/firebase_product_api';
 import { useProductStore } from '@/store/product';
 import { preset_images } from '@/utils/img_base64';
+import { useDialogStore } from '@/store/dialog.js';
+let dialog_store = useDialogStore();
 let emit = defineEmits(['cancel']);
 let product_store = useProductStore();
 //類別
@@ -133,11 +134,7 @@ function click_push() {
     await product_store.get_new_data();
   }
 
-  //呼叫對話框
-  emitter.emit('open-dialog', {
-    mes: '確定上傳?',
-    handleConfirm: push_data,
-  });
+  dialog_store.call_dialog('商品上傳提示', '確定上傳新的資料?', push_data);
 }
 </script>
 

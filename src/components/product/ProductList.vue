@@ -54,9 +54,10 @@
 import { ref, computed } from 'vue';
 import ReviseProduct from './ReviseProduct.vue';
 import { product_api } from '@/api/firebase_product_api';
-import emitter from '@/utils/emitter';
 import { useProductStore } from '@/store/product';
 import { ElMessage } from 'element-plus';
+import { useDialogStore } from '@/store/dialog.js';
+let dialog_store = useDialogStore();
 let product_store = useProductStore();
 let revise_module_show = ref(false);
 let props = defineProps(['item']);
@@ -67,12 +68,7 @@ function delete_product() {
     await product_api.delete_product(props.item.key);
     product_store.get_new_data();
   }
-
-  //呼叫對話框
-  emitter.emit('open-dialog', {
-    mes: '確定刪除?',
-    handleConfirm: delete_data,
-  });
+  dialog_store.call_dialog('商品刪除提示', '確定刪除資料?', delete_data);
 }
 
 //修改上下架
@@ -92,10 +88,7 @@ function revise_isListed(action) {
     //點擊上架且狀態為下架 或相反
     state = !state;
 
-    emitter.emit('open-dialog', {
-      mes: '確定修改?',
-      handleConfirm: revise_state,
-    });
+    dialog_store.call_dialog('商品修改提示', '確定上傳修改後的資料?', revise_state);
   } else {
     alert('當前狀態相同');
   }

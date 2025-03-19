@@ -1,10 +1,3 @@
-import emitter from './emitter';
-
-//進行promise操作時 啟用loading遮罩
-function executeLoading(promise) {
-  emitter.emit('loading', promise);
-}
-
 //firebase時間戳記轉為UTC+8
 function convert_firebase_timestamp_to_UTC8(timestamp) {
   let error_text = '無';
@@ -50,4 +43,4 @@ async function delay_time(ms) {
   });
 }
 
-export { executeLoading, convert_firebase_timestamp_to_UTC8, delay_time };
+export { convert_firebase_timestamp_to_UTC8, delay_time };

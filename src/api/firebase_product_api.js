@@ -18,10 +18,10 @@ function id_prohibited_update(id) {
     'qN4Q3R79JLAl4hzeqPAS',
     'yPZ6Nig12l8Cdu6REoY1',
     'yz1hRVJ9ea0fcP3ajBsQ',
-    'yuabuZMsvJF2F0rbtCBo',
+    // 'yuabuZMsvJF2F0rbtCBo',
   ];
   if (id_arr.includes(id)) {
-    ElMessage.error('該商品為限制項 您沒有權限修改 請使用自訂項目測試');
+    ElMessage.error('該商品為限制項 沒有權限修改 請使用自訂新增項目測試');
     return true;
   } else {
     return false;
@@ -64,7 +64,6 @@ let product_api = {
     }
     try {
       await update_data(path, docid, data);
-      update_ui();
     } catch (error) {
       throw error;
     }
@@ -77,7 +76,6 @@ let product_api = {
     }
     try {
       await delete_data(path, docid);
-      update_ui();
     } catch (error) {
       throw error;
     }

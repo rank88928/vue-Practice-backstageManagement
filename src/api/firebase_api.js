@@ -1,16 +1,25 @@
 import * as firebase from './firebase_config';
 import { ElMessage } from 'element-plus';
-
+import { ElLoading } from 'element-plus';
 let api = firebase.firestore_api; //官方api接口
 let db = firebase.firestore_api.db; //指定資料庫
 
-//響應錯誤攔截
+//請求響應攔截
 async function intercepting_responses(promise) {
+  const loadingInstance = ElLoading.service({
+    lock: true,
+    text: '等候響應中...',
+    background: 'rgba(0, 0, 0, 0.7)',
+  });
+
   try {
-    return await promise;
+    let result = await promise;
+    return result;
   } catch (error) {
     console.error(error);
     return Promise.reject(error);
+  } finally {
+    loadingInstance.close();
   }
 }
 
@@ -56,7 +65,7 @@ async function add_data(path, data, show = true) {
     await api.setDoc(dbRef, data);
     if (show) ElMessage.success('新增成功');
   } catch (error) {
-    if (show) ElMessage.success('新增失敗');
+    if (show) ElMessage.error('新增失敗');
     throw error;
   }
 }
@@ -68,7 +77,7 @@ async function add_customId_data(path, data, id, show = true) {
     await api.setDoc(dbRef, data);
     if (show) ElMessage.success('新增成功');
   } catch (error) {
-    if (show) ElMessage.success('新增失敗');
+    if (show) ElMessage.error('新增失敗');
     throw error;
   }
 }

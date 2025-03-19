@@ -54,11 +54,12 @@
 
 <script setup>
 import { ref, reactive, defineEmits } from 'vue';
-import emitter from '@/utils/emitter';
+
 import { product_api } from '@/api/firebase_product_api';
 import UploadImg from '@/components/UploadImg.vue';
 import { useProductStore } from '@/store/product';
-
+import { useDialogStore } from '@/store/dialog.js';
+let dialog_store = useDialogStore();
 let props = defineProps(['item']);
 let update_obj = reactive(JSON.parse(JSON.stringify(props.item))); //副本
 let emit = defineEmits(['cancel']);
@@ -123,16 +124,13 @@ function user_update_img(e) {
 function update(obj) {
   async function revise_data() {
     let revise_data = find_differences(obj, props.item);
-    emit('cancel'); //關閉對話框
+    emit('cancel'); //關閉修改框
 
     await product_api.update_product(props.item.key, revise_data);
     await product_store.get_new_data();
   }
 
-  emitter.emit('open-dialog', {
-    mes: '確定上傳?',
-    handleConfirm: revise_data,
-  });
+  dialog_store.call_dialog('商品修改提示', '確定上傳修改後的資料?', revise_data);
 }
 
 //修改差異
