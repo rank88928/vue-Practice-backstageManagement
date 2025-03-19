@@ -37,13 +37,13 @@
       </div>
     </div>
     <div class="btn-box">
-      <el-button type="primary" size="large" :disabled="item.isListed" @click="revise_isListed('listed')">商品上架</el-button>
+      <el-button v-permission="['superAdmin', 'admin']" type="primary" size="large" :disabled="item.isListed" @click="revise_isListed('listed')">商品上架</el-button>
 
-      <el-button type="primary" size="large" :disabled="!item.isListed" @click="revise_isListed('unlisted')">商品下架</el-button>
+      <el-button v-permission="['superAdmin', 'admin']" type="primary" size="large" :disabled="!item.isListed" @click="revise_isListed('unlisted')">商品下架</el-button>
 
-      <el-button type="warning" size="large" @click="revise_module_show = true">修改資料</el-button>
+      <el-button v-permission="['superAdmin', 'admin']" type="warning" size="large" @click="check_status_before_revise(item.isListed)">修改資料</el-button>
 
-      <el-button type="danger" size="large" @click="delete_product">刪除</el-button>
+      <el-button v-permission="['superAdmin', 'admin']" type="danger" size="large" @click="delete_product">刪除</el-button>
     </div>
 
     <ReviseProduct v-if="revise_module_show" @cancel="revise_module_show = false" :item="item" />

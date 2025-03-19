@@ -24,18 +24,22 @@ const router = createRouter({
           children: [
             {
               path: 'home',
+              name: 'home',
               component: HomePage,
             },
             {
               path: 'product',
+              name: 'product',
               component: ProductManagementPage,
             },
             {
               path: 'account',
+              name: 'account',
               component: AccountManagementPage,
             },
             {
               path: 'order',
+              name: 'order',
               component: OrderManagementPage,
             },
           ],
@@ -44,6 +48,7 @@ const router = createRouter({
     },
     {
       path: '/auth',
+      name: '/auth',
       component: AuthLayout,
     },
   ],

@@ -2,7 +2,7 @@
   <div class="panel-container">
     <DataPanel :data="plate_config">
       <template v-slot:btn>
-        <el-button type="primary" @click="random_add_order()">建立新訂單</el-button>
+        <el-button v-permission="['superAdmin', 'admin']" type="primary" @click="random_add_order()">建立隨機新訂單</el-button>
       </template>
     </DataPanel>
   </div>
@@ -23,8 +23,8 @@
               <el-table-column prop="subtotal" label="單項小計" />
             </el-table>
             <div class="btn-box">
-              <el-button type="success" v-if="row.order_details.schedule.status === 'pending'" @click="verify_order(row.key, $index)">確認完成</el-button>
-              <el-button type="primary" v-if="row.order_details.schedule.status === 'processing'" @click="fulfill_order(row.key, $index)">處理完成</el-button>
+              <el-button v-permission="['superAdmin', 'admin']" type="success" v-if="row.order_details.schedule.status === 'pending'" @click="verify_order(row.key, $index)">確認完成</el-button>
+              <el-button v-permission="['superAdmin', 'admin']" type="primary" v-if="row.order_details.schedule.status === 'processing'" @click="fulfill_order(row.key, $index)">處理完成</el-button>
             </div>
           </div>
         </template>

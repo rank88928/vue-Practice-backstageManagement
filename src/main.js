@@ -13,6 +13,8 @@ import router from '@/router';
 import App from './App.vue';
 import { createPinia } from 'pinia';
 
+import permission from '@/directives/permission.js';
+
 const app = createApp(App);
 const pinia = createPinia();
 
@@ -26,4 +28,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(pinia);
 app.use(router);
 app.use(naive);
+app.directive('permission', permission);
 app.mount('#app');

@@ -5,7 +5,7 @@
         <el-button type="primary" size="large" @click="category = 'all'">全部商品列表</el-button>
         <el-button type="primary" size="large" @click="category = 'listed'">已上架列表</el-button>
         <el-button type="primary" size="large" @click="category = 'unlisted'">下架列表</el-button>
-        <el-button type="primary" size="large" plain @click="add_modal_show = true">新增商品</el-button>
+        <el-button v-permission="['superAdmin', 'admin']" type="primary" size="large" plain @click="add_modal_show = true">新增商品</el-button>
       </template>
     </DataPanel>
   </div>
@@ -132,6 +132,15 @@ async function observer_callback(data) {
   if (data.length === display_data.length) {
     loading.logo_show = false;
     loading.text = '已無更多資料';
+
+    // function arr() {
+    //   let arr = [];
+    //   display_data.forEach((item) => {
+    //     arr.push(item.key);
+    //     console.log(arr);
+    //   });
+    // }
+    // arr();
   } else {
     await delay_time(500);
     new_data = data.slice(display_data.length, display_data.length + 3);
