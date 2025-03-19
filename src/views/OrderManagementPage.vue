@@ -30,7 +30,15 @@
         </template>
       </el-table-column>
       <el-table-column sortable prop="basic.order_id" label="訂單序號" />
-      <el-table-column sortable prop="basic.builder" label="建立者" />
+      <el-table-column sortable prop="basic.builder" label="建立者">
+        <template #default="scope">
+          <el-button :type="get_style_string('role_type', get_builder_name(scope.row.basic.builder).role)" plain disabled>
+            {{ get_zh_TW_map('permission_type', get_builder_name(scope.row.basic.builder).role) }}
+          </el-button>
+          {{ get_builder_name(scope.row.basic.builder).name }}
+        </template>
+      </el-table-column>
+
       <el-table-column sortable prop="basic.build_time" label="建立時間" />
       <el-table-column sortable prop="order_details.schedule.status" label="訂單狀態" :filters="state_filters_options" :filter-method="filter_state">
         <template #default="scope">
@@ -54,7 +62,9 @@
 import { ref, reactive, onMounted, watch } from 'vue';
 import DataPanel from '@/components/DataPanel.vue';
 import { order_api } from '@/api/firebase_order_api.js';
-import { get_zh_TW_map, delay_time } from '@/utils/utils.js';
+import { user_api } from '@/api/firebase_user_api.js';
+import { delay_time } from '@/utils/utils.js';
+import { get_zh_TW_map, get_style_string } from '@/utils/dictionary.js';
 import StepBar from '@/components/StepBar.vue';
 import { useUserStore } from '@/store/user.js';
 
@@ -114,6 +124,7 @@ let state_step = [
     step: 2,
   },
 ];
+let user_data = [];
 
 //修改訂單狀態
 async function verify_order(id, index) {
@@ -155,7 +166,6 @@ function expand_log(row) {
   }
 }
 
-//表單格式化
 function current_step(state) {
   return state_step.find((item) => {
     return item.state === state;
@@ -173,6 +183,23 @@ function processed_state_data(time_line) {
   return data;
 }
 
+async function get_user_data() {
+  let new_data = await user_api.get_all_user_data();
+  user_data = new_data.map((item) => {
+    return {
+      name: item.name,
+      role: item.role,
+      key: item.key,
+    };
+  });
+}
+function get_builder_name(key) {
+  let user = user_data.find((item) => {
+    return item.key === key;
+  });
+  return user;
+}
+
 //資料渲染
 async function get_data() {
   try {
@@ -188,6 +215,7 @@ async function get_data() {
 
 onMounted(async () => {
   get_data();
+  get_user_data();
 });
 
 function random_add_order() {
