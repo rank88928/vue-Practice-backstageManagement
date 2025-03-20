@@ -1,8 +1,7 @@
 <template>
   <div v-if="show" class="weather">
-    即時天氣
     <div class="city">
-      <span>{{ weather_data.city }}</span>
+      <span>即時天氣:{{ weather_data.city }}</span>
     </div>
     <div class="temp">
       <img src="@/assets/clouds.png" alt="" />
@@ -15,13 +14,13 @@
     </div>
   </div>
 
-  <div v-else>資料加載中</div>
+  <div class="weather-placeholder" v-else>資料加載中</div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted, defineEmits } from 'vue';
 import weather_api from '../../api/weather_api';
-
+let emit = defineEmits(['get']);
 let props = defineProps(['city']);
 let data = reactive([]);
 let show = ref(false);
@@ -41,13 +40,14 @@ let temp = computed(() => {
 });
 
 async function get_weather() {
-  // let nwe_data = (await weather_api.get()).data;
-  // data.splice(0, data.length, ...nwe_data);
-  // show = true;
+  let nwe_data = (await weather_api.get()).data;
+  data.splice(0, data.length, ...nwe_data);
+  show = true;
 }
 
-onMounted(() => {
-  get_weather();
+onMounted(async () => {
+  await get_weather();
+  emit('get');
 });
 </script>
 
@@ -56,7 +56,12 @@ onMounted(() => {
   width: 100%;
   height: 100%;
 }
-
+.weather-placeholder {
+  width: 100%;
+  height: 1% !important;
+  display: flex;
+  justify-content: center;
+}
 .city {
   margin-top: 16px;
   text-align: center;

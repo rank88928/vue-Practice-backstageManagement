@@ -51,6 +51,12 @@
       <div class="switch" :class="[{ 'switch-login': !switch_box, 'switch-register': switch_box }]">
         <el-button type="primary" @click="switch_box = true">登入</el-button>
         <el-button type="primary" @click="switch_box = false">註冊</el-button>
+        <div class="point">
+          <samp>測試管理員</samp>
+          <samp>帳號:zxc123456@gmail.com</samp>
+          <samp>密碼:zxc123456</samp>
+          <samp>一般帳號可隨意註冊登入但權限受限</samp>
+        </div>
       </div>
     </div>
     <Background />
@@ -72,12 +78,12 @@ let router = useRouter();
 //用戶資料
 let user = reactive({
   login_form: {
-    email: 'qq889281@gmail.com',
-    password: 'qq112988',
+    email: '',
+    password: '',
   },
   signup_form: {
-    email: 'qq889281@gmail.com',
-    password: 'qq112988',
+    email: '',
+    password: '',
   },
 });
 
@@ -254,5 +260,15 @@ function login_user() {
 .el-button {
   width: 100%;
   margin-top: 20px;
+}
+
+.point {
+  color: #8f0e0e;
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+}
+.point samp {
+  font-size: 16px;
 }
 </style>

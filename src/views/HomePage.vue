@@ -1,6 +1,6 @@
 <template>
   <div class="data-map">
-    <WeatherForecast :class="{ weather: true, anim: anim_switch }" :city="specify_city" />
+    <WeatherForecast v-on:get="weather" :class="{ weather: true, anim: anim_switch }" :city="specify_city" />
     <Map class="map" v-on:click="pick"></Map>
     <div class="tourism-card-container" v-if="travel_data.length > 0">
       <div class="collapse">
@@ -30,7 +30,7 @@ import { travel_format, travel_upload, travel_api as travel_serve } from '@/api/
 let travel_api = travel_serve();
 
 let specify_city = ref('嘉義市');
-let anim_switch = ref();
+let anim_switch = ref(false);
 let travel_data = reactive([]);
 function pick(e) {
   if (anim_switch.value === false) {
@@ -40,6 +40,16 @@ function pick(e) {
   setTimeout(() => {
     anim_switch.value = false;
     specify_city.value = e.properties.COUNTYNAME;
+  }, 500);
+}
+
+function weather() {
+  if (anim_switch.value === false) {
+    anim_switch.value = true;
+  }
+  setTimeout(() => {
+    anim_switch.value = false;
+    specify_city.value = '嘉義市';
   }, 500);
 }
 

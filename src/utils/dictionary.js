@@ -1,6 +1,7 @@
 const dictionary = {
   permission_type: {
     superAdmin: '超級管理員',
+    admin: '測試管理員',
     generalUser: '普通會員',
   },
 
@@ -31,6 +32,7 @@ const dictionary = {
 const style_dictionary = {
   role_type: {
     superAdmin: 'danger',
+    admin: 'danger',
     generalUser: 'primary',
   },
 };
