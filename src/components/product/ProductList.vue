@@ -41,9 +41,19 @@
 
       <el-button v-permission="['superAdmin', 'admin']" type="primary" size="large" :disabled="!item.isListed" @click="revise_isListed('unlisted')">商品下架</el-button>
 
-      <el-button v-permission="['superAdmin', 'admin']" type="warning" size="large" @click="check_status_before_revise(item.isListed)">修改資料</el-button>
+      <el-button
+        v-permission="['superAdmin', 'admin']"
+        type="warning"
+        size="large"
+        @click="
+          check_status_before_revise(item.isListed, () => {
+            revise_module_show = true;
+          })
+        "
+        >修改資料</el-button
+      >
 
-      <el-button v-permission="['superAdmin', 'admin']" type="danger" size="large" @click="delete_product">刪除</el-button>
+      <el-button v-permission="['superAdmin', 'admin']" type="danger" size="large" @click="check_status_before_revise(item.isListed, delete_product)">刪除</el-button>
     </div>
 
     <ReviseProduct v-if="revise_module_show" @cancel="revise_module_show = false" :item="item" />
@@ -94,13 +104,12 @@ function revise_isListed(action) {
   }
 }
 
-//修改前判斷狀態
-function check_status_before_revise(isListed) {
+function check_status_before_revise(isListed, callback) {
   if (isListed === true) {
     ElMessage.error('商品必須為下架狀態才能修改! 請先下架');
     return;
   }
-  revise_module_show.value = true;
+  callback();
 }
 
 //全轉換成字串 el-input只接受字串格式 圖片不用
